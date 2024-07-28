@@ -1,7 +1,7 @@
 FROM ubuntu:18.04
 
 # Basic dependency
-RUN apt-get update && apt-get install -y gnupg2 git g++ gyp gcc make curl
+RUN apt-get update && apt-get install -y gnupg2 git g++ gyp gcc make curl libvips-dev
 RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv E52529D4
 RUN rm /bin/sh && ln -s /bin/bash /bin/sh
 
