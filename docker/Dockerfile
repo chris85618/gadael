@@ -27,8 +27,8 @@ COPY package.json package-lock.json /app/
 COPY bower.json /app/
 RUN cd /app && npm set progress=false && npm install
 
-# Install istanbul-middleware
-RUN cd /app && npm install istanbul-middleware
+# Install istanbul-middleware and request
+RUN cd /app && npm install istanbul-middleware request
 
 # Configure App
 COPY .  /app

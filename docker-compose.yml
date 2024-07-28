@@ -1,10 +1,10 @@
-version: "3.3"
 services:
   mongo:
     image: mongo:4.0.17
     restart: always
     networks:
       - traefik
+
   gadael:
     image: chris85618/gadael
     build:
@@ -16,6 +16,7 @@ services:
       - LOGHTTP=true
       - CSRFPROTECTION=false
       - POSTPHONE=true
+      - API_CALLBACK_URL=http://localhost:3000
 #      - CALLBACK_URL=http://gadael:3000
 #      - APP_HOST=gadael
       - APP_PORT=3000

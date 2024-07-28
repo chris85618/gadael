@@ -26,6 +26,7 @@ const approbalert = require('../modules/approbalert');
 const googlecalendar = require('../rest/user/googlecalendar');
 const decodeUrlEncodedBody = require('body-parser').urlencoded({ extended: false });
 const loginPromise = require('../modules/login');
+const request = require('request');
 
 /**
  * Load models into an external mongo connexion
@@ -730,9 +731,43 @@ exports = module.exports = {
 
 	        if (callback) {
 	            server.on('listening', callback);
-	        }
-		});
 
+                // ignore csrf protection
+                let csrfProtection = null;
+                if (app.config.csrfProtection) {
+                    const defaultCsrfMiddleware = csrf({ cookie: true });
+                    csrfProtection = (req, res, next) => {
+                        // ignore CSRF protection for /rest/anonymous/createfirstadmin
+                        if('/login/oauth-token' === req.path || req.path.startsWith('/rest/anonymous/createfirstadmin')) {
+                            next();
+                            return;
+                        }
+
+                        return defaultCsrfMiddleware(req, res, next);
+                    };
+                }
+
+                // create the first admin
+                request.post({
+                    url: `${process.env.API_CALLBACK_URL}/rest/anonymous/createfirstadmin`,
+                    json: {
+                        firstname: 'admin',
+                        lastname: 'admin',
+                        email: 'admin@admin.com',
+                        newpassword: 'selab1623',
+                        newpassword2: 'selab1623'
+                    }
+                }, (error, response, body) => {
+                    if (error) {
+                        console.error('Failed to create first admin:', error);
+                    } else if (response.statusCode !== 200) {
+                        console.error('Failed to create first admin:', body);
+                    } else {
+                        console.log('First admin created successfully.');
+                    }
+                });
+            }
+        });
         app.server = server;
         return server;
     }
