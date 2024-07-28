@@ -265,7 +265,9 @@ exports = module.exports = {
 			.then(count => {
 
 				if (0 !== count) {
-					throw new Error('createDb: Database already initialized with company object: '+dbName);
+//					throw new Error('createDb: Database already initialized with company object: '+dbName);
+					console.warn('createDb: Database already initialized with company object: ' + dbName);
+					return Company.findOne().exec();
 				}
 
 
