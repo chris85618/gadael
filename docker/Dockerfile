@@ -30,11 +30,13 @@ RUN cd /app && npm set progress=false && npm install
 # Install istanbul-middleware
 RUN cd /app && npm install istanbul-middleware
 
-RUN bower install --allow-root
-
 # Configure App
 COPY .  /app
 RUN mv config.docker.js config.js
+
+# Install Bower Components
+RUN cd /app && bower install --allow-root
+
 CMD node /app/app.js
 ENV NODE_ENV production
 EXPOSE 3000
