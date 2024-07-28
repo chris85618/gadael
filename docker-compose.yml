@@ -6,6 +6,7 @@ services:
     networks:
       - traefik
   gadael:
+    image: chris85618/gadael
     build:
       context: .
       dockerfile: ./docker/Dockerfile
