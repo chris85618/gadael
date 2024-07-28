@@ -75,6 +75,8 @@ exports = module.exports = function(app, passport)
 
 	app.get('/rest/common', require('./Common').getInfos);
 
+    // Add instrumentation
+    app.use('/coverage', require('istanbul-middleware').createHandler());
 
     controllers.add('./user/user');
     controllers.add('./user/settings');

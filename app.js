@@ -1,4 +1,15 @@
-'use strict';
+// 'use strict';
+
+var im = require('istanbul-middleware'),
+    isCoverageEnabled = "true";
+
+//before your code is require()-ed, hook the loader for coverage
+if (isCoverageEnabled) {
+    console.log('Hook loader for coverage - ensure this is not production!');
+    im.hookLoader(__dirname);
+        // cover all files except under node_modules
+        // see API for other options
+}
 
 const companyApi = require('./api/Company.api');
 const headless = require('./api/Headless.api');
@@ -21,6 +32,8 @@ try {
 function start() {
     let models = require('./models');
     let app = companyApi.getExpress(config, models);
+    // Add instrumentation with istanbul-middleware
+    app.use('/coverage', im.createHandler());
     app.server = companyApi.startServer(app, function() {
         if (null !== config.inactivityTimeout) {
             app.inactivity = setTimeout(function() {
